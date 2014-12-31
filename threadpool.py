@@ -63,12 +63,10 @@ class Worker(Thread):
     def run(self):
         while True:
             func, args, kwargs = self.__task_queue.get(True)
-            
-            if self.__stop.is_set():
-                self.__task_queue.task_done()
-                break;
-                
+
             try:
+                if self.__stop.is_set():
+                    break
                 func(*args, **kwargs)
             except Exception, e: 
                 print func.__name__, ':', e
